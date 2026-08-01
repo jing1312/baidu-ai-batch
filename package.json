@@ -1,0 +1,15 @@
+{
+  "name": "baidu-ai-batch",
+  "version": "1.0.0",
+  "private": true,
+  "description": "通过 Chrome DevTools Protocol (CDP) 控制本地浏览器，批量导出百度网盘 AI 课件 PPT / AI 文稿 / AI 笔记",
+  "license": "MIT",
+  "bin": {
+    "export-ppt": "bin/export-ppt.cjs",
+    "extract-manuscript": "bin/extract-manuscript.cjs",
+    "export-notes": "bin/export-notes.cjs"
+  },
+  "dependencies": {
+    "ws": "^8.21.0"
+  }
+}
