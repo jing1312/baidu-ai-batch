@@ -2,7 +2,7 @@
   "host": "127.0.0.1",
   "port": 9222,
   "panBase": "https://pan.baidu.com",
-  "videoFolder": "/我的资源/课程视频/",
+  "videoFolder": "/视频目录/",
   "listFile": "video-list.txt",
   "stateFile": "state.json",
   "outputDir": "output",

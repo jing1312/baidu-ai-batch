@@ -95,14 +95,15 @@
     return false;
   }
 
-  async function waitForText(minLen, timeoutMs) {
+  async function waitDraftText(minLen, timeoutMs) {
     const end = Date.now() + timeoutMs;
     while (Date.now() < end) {
-      const text = document.body ? (document.body.innerText || '') : '';
+      const d = document.querySelector('.vp-ai-draft');
+      const text = d ? (d.textContent || '').trim() : '';
       if (text.length > minLen) return text;
       await sleep(2000);
     }
-    return document.body ? (document.body.innerText || '') : '';
+    return '';
   }
 
   function findTextButton(text) {
@@ -158,7 +159,7 @@
       setStatus('② 讲稿：等待 AI 讲稿生成…');
       if (await clickTab('文稿')) {
         await sleep(1500);
-        const text = await waitForText(100, 120000);
+        const text = await waitDraftText(100, 120000);
         if (text.length > 100) {
           downloadTxt(short.replace(VIDEO_RE, '') + '_文稿.txt', text);
           markDone(short, 'draft');
@@ -252,7 +253,7 @@
   // ---------- 列表页：收集当前目录视频 ----------
   async function handleHomePage() {
     const params = new URLSearchParams(location.search);
-    let dir = params.get('dir') || '/我的资源/课程视频/';
+    let dir = params.get('dir') || '/视频目录/';
     ensurePanel();
     setStatus('列表页\n目录：' + dir);
 

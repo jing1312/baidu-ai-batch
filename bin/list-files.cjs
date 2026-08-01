@@ -34,7 +34,8 @@ async function main() {
           if (j.list.length < 200) break;
         }
         return all.map(function(f){ return f.server_filename; });
-      })()`
+      })()`,
+      true
     );
 
     const videos = files.filter((n) => /\.(mp4|mkv|mov|avi)$/i.test(n));

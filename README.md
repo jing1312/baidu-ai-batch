@@ -92,7 +92,7 @@ cp config.example.json config.json   # Windows: copy config.example.json config.
 
 ```jsonc
 {
-  "videoFolder": "/我的资源/课程视频/",  // ← 视频在网盘哪个目录
+  "videoFolder": "/视频目录/",          // ← 视频在网盘哪个目录
   "skipList": []                         // ← 要跳过的视频（比如黑屏、损坏的）
 }
 ```
@@ -119,7 +119,7 @@ node bin/export-notes.cjs        # ③ 批量生成并导出 AI 笔记（--force
 |------|------|------|
 | `host` / `port` | 浏览器调试地址 | `127.0.0.1:9222` |
 | `panBase` | 网盘域名 | `https://pan.baidu.com` |
-| `videoFolder` | 网盘内视频目录，以 `/` 结尾 | `/我的资源/课程视频/` |
+| `videoFolder` | 网盘内视频目录，以 `/` 结尾 | `/视频目录/` |
 | `listFile` | 视频清单文件 | `video-list.txt` |
 | `stateFile` | PPT 进度存档（断点续传用） | `state.json` |
 | `outputDir` | 讲稿/笔记本地输出目录 | `output/` |
@@ -165,8 +165,8 @@ baidu-ai-batch/
 ├── lib/
 │   ├── cdp.js                  # CDP 连接 / 新标签页 / JS 求值 / 超时
 │   └── config.js               # 配置加载与解析
-├── config.example.json         # 配置模板
-└── video-list.txt              # 视频清单（list-files 生成）
+├── config.example.json         # 配置模板（复制为 config.json 使用）
+└── video-list.txt              # 视频清单，运行时本地生成（不入库）
 ```
 
 ## 许可
