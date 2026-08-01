@@ -171,4 +171,4 @@ baidu-ai-batch/
 
 ## 许可
 
-MIT — 随便用，改坏了别找我。
+[MIT License](LICENSE)
