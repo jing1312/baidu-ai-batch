@@ -2,5 +2,6 @@ node_modules/
 config.json
 state.json
 output/
+video-list.txt
 *.log
 .DS_Store
