@@ -3,6 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const { connectBrowser, openTab, evalJS, closeTarget, sleep } = require('../lib/cdp');
 const { loadConfig, parseArgv, videoPageUrl } = require('../lib/config');
+const { exportNote } = require('../lib/note-export');
 
 const args = parseArgv(process.argv.slice(2));
 const cfg = loadConfig(args.config);
@@ -108,22 +109,26 @@ async function processNote(browserCdp, item) {
         })()`);
       } catch (_) {}
 
+      if (content.length <= cfg.minContentLen) {
+        return { success: false, reason: '笔记内容过短，未执行导出' };
+      }
+      /**
+       * 笔记导出适配了悬停菜单：脚本先用真实鼠标悬停「导出」，等待「导出到网盘」出现，再点击菜单项。找不到可点击的菜单项会报错，不会把点击旧入口当作成功。日志表示已点击按钮，最终文件仍以网盘中的结果为准。
+
+如果之前已经生成了本地笔记 TXT，但没有真正导出到网盘，用 `node bin/export-notes.cjs --force` 重新处理（会重跑清单内未跳过的视频，已有网盘导出可能重复）。
+
+若页面后续再次改版，可在 `config.json` 中添加 `noteExportHoverSelector`（悬停入口的 CSS 选择器）和 `noteExportButtonSelector`（真正导出按钮的 CSS 选择器），覆盖默认文字定位。`noteExportTimeoutMs` 可调整入口和菜单的总等待时间，默认 15000 毫秒。
+       */
+
+      await exportNote(noteTab.cdp, cfg);
+      log('    已悬停并点击导出按钮，等待页面处理（请确认网盘中的导出文件）');
+      await sleep(2000);
+
       if (content.length > cfg.minContentLen) {
         if (!fs.existsSync(cfg.outputDir)) fs.mkdirSync(cfg.outputDir, { recursive: true });
         const outputFile = path.join(cfg.outputDir, item.name.replace(/\.(mp4|mkv|mov|avi)$/i, '') + '_笔记.txt');
         fs.writeFileSync(outputFile, content.text, 'utf8');
       }
-
-      try {
-        await evalJS(noteTab.cdp, `(function(){
-          var els = document.querySelectorAll("*");
-          for(var i=0; i<els.length; i++) {
-            var text = (els[i].textContent||"").trim();
-            if(text === "导出") { els[i].click(); return; }
-          }
-        })()`);
-      } catch (_) {}
-      await sleep(2000);
 
       return { success: true, length: content.length };
     } finally {

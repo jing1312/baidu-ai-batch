@@ -75,7 +75,8 @@ AI 生成失败时页面会留一段 85~91 字的占位模板，看起来像生�
 ### 1. 启动调试浏览器
 
 ```bash
-msedge --remote-debugging-port=9222
+msedge --remote-debugging-port=9222  --user-data-dir="C:\EdgeDebugProfile" --no-first-run --disable-extensions
+# 新版edge需要指定独立的user-data-dir，要不然会静默失败（不报错，但是调试端口打不开）
 # 或 chrome --remote-debugging-port=9222
 ```
 
